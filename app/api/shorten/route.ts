@@ -32,7 +32,11 @@ export async function POST(req: NextRequest) {
     const exists = await prisma.link.findUnique({ where: { slug }, select: { id: true } });
     if (exists) continue;
     const link = await prisma.link.create({ data: { slug, url: parsed.toString() } });
-    const base = process.env.NEXT_PUBLIC_BASE_URL ?? new URL(req.url).origin;
+    // Derive the base from the actual request (works behind the Vercel proxy)
+    // so short links always match the domain they're served from — no env needed.
+    const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+    const proto = req.headers.get("x-forwarded-proto") ?? "https";
+    const base = host ? `${proto}://${host}` : process.env.NEXT_PUBLIC_BASE_URL ?? new URL(req.url).origin;
     return NextResponse.json({ slug: link.slug, url: link.url, short: `${base}/${link.slug}` }, { status: 201 });
   }
   return NextResponse.json({ error: "Could not generate a link, try again" }, { status: 500 });

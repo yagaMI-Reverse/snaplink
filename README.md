@@ -5,7 +5,7 @@ device split, and referrers — all aggregated from individual click events.
 
 **Stack:** Next.js 14 (App Router) · TypeScript · **Prisma ORM · PostgreSQL** · Tailwind CSS · Recharts
 
-🔗 **Live demo:** _deployed on Vercel_ (see Deploy)
+🔗 **Live demo:** https://snaplink-six.vercel.app
 
 ![Snaplink](./screenshot.png)
 
