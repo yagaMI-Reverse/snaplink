@@ -1,0 +1,36 @@
+// Snaplink — Prisma schema (PostgreSQL)
+// Two models: a short Link and its individual Click events. Analytics are
+// aggregated from Click rows at query time.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Link {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  url       String
+  createdAt DateTime @default(now())
+  clicks    Click[]
+
+  @@index([createdAt])
+}
+
+model Click {
+  id        String   @id @default(cuid())
+  linkId    String
+  link      Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  country   String   @default("Unknown")
+  device    String   @default("Unknown")
+  referrer  String   @default("Direct")
+  createdAt DateTime @default(now())
+
+  @@index([linkId])
+  @@index([createdAt])
+}
