@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import PwaRegister from "@/components/PwaRegister";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,12 +18,20 @@ export const metadata: Metadata = {
   title: "Snaplink — Short links with real analytics",
   description:
     "Shorten any URL and see who clicks: clicks over time, top countries, devices and referrers. Built on Next.js + Prisma + PostgreSQL.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Snaplink" },
+  icons: { icon: "/icon-192.png", apple: "/icon-192.png" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#07070f",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${jbmono.variable}`}>
       <body>
+        <PwaRegister />
         <div className="aurora" aria-hidden="true">
           <div
             className="aurora-blob"
